@@ -13,7 +13,8 @@ class LineInfo extends StatelessWidget {
           Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                  color: const Color.fromARGB(255, 36, 182, 29),
+                  borderRadius: BorderRadius.circular(10)),
               child: Text(
                 state.lineaActual!.nombre,
                 style: const TextStyle(fontWeight: FontWeight.bold),

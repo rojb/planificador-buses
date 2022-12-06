@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: const LoadingScreen(),
       theme: ThemeData(useMaterial3: true),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

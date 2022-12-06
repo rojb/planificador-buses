@@ -20,7 +20,7 @@ class LineAppBar extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(left: 20, top: 15),
                   decoration: BoxDecoration(
-                      color: Colors.blueAccent,
+                      color: const Color.fromARGB(255, 43, 172, 34),
                       borderRadius: BorderRadius.circular(25)),
                   child: IconButton(
                       onPressed: () {

@@ -12,7 +12,9 @@ class BtnCurrentUserLocation extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0),
       child: FloatingActionButton(
+          backgroundColor: Colors.green[600],
           heroTag: "btnUserLocation",
+          //backgroundColor: Colors.green,
           elevation: 2,
           onPressed: () {
             final userLocation = locationBloc.state.lastKnowLocation;

@@ -23,6 +23,7 @@ class BtnSearchLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      backgroundColor: Colors.green[600],
       heroTag: "btnSearchLine",
       onPressed: () async {
         final result =
