@@ -15,7 +15,7 @@ class Parada {
   }
 
   // Implement toString to make it easier to see information about
-  // each dog when using the print statement.
+  // each property when using the print statement.
   @override
   String toString() {
     return 'Parada{paradaID: $paradaID, longitud: ${coordenadas.longitude}, latitud: ${coordenadas.latitude}}';

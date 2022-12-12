@@ -14,7 +14,7 @@ class BtnSearchLine extends StatelessWidget {
 
     if (result != null) {
       final LineaRecorrido destination = result;
-      final points = destination.points;
+      final points = destination.puntosIda;
       await mapBloc.drawRoutePolyline(destination);
       mapBloc.moveCamera(points[(points.length - 1) ~/ 2], zoom: 11.5);
     }

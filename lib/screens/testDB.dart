@@ -13,15 +13,16 @@ class DBTest extends StatefulWidget {
 class _DBTestState extends State<DBTest> {
   final db = DB();
   void insertDB() async {
-    await db.insertLines();
+    /*   await db.insertLines();
     await db.insertStops();
-    await db.insertRoutes();
-    print(await db.route('L001V'));
+    await db.insertRoutes(); */
+    /*  print(await db.route('L001V')); */
+    print('loaded');
   }
 
   @override
   Widget build(BuildContext context) {
-    insertDB();
+    /*  insertDB(); */
     return Scaffold(
       appBar: AppBar(title: Text('Prueba')),
       body: FutureBuilder(
@@ -32,7 +33,7 @@ class _DBTestState extends State<DBTest> {
                 itemBuilder: (context, index) {
                   final linea = snapshot.data![index];
                   return ListTile(
-                    title: Text('${linea.lineaID} - ${linea.nombre} '),
+                    title: Text('${linea.cod} - ${linea.nombre} '),
                   );
                 },
                 separatorBuilder: (context, index) => const Divider(),

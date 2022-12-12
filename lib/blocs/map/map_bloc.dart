@@ -50,29 +50,50 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   Future drawRoutePolyline(LineaRecorrido destination) async {
-    final myRoute = Polyline(
-      polylineId: const PolylineId('route'),
+    final miRutaIda = Polyline(
+      polylineId: const PolylineId('route-ida'),
       color: Colors.red,
       width: 5,
-      points: destination.points,
+      points: destination.puntosIda,
+      startCap: Cap.roundCap,
+      endCap: Cap.roundCap,
+    );
+    final miRutaVuelta = Polyline(
+      polylineId: const PolylineId('route-vuelta'),
+      color: const Color.fromARGB(255, 31, 112, 35),
+      width: 5,
+      points: destination.puntosVuelta,
       startCap: Cap.roundCap,
       endCap: Cap.roundCap,
     );
 
-    final startMarker = Marker(
-      markerId: const MarkerId('start'),
-      position: destination.points.first,
+    final startMarkerIda = Marker(
+      markerId: const MarkerId('start-ida'),
+      position: destination.puntosIda.first,
     );
-    final endMarker = Marker(
-      markerId: const MarkerId('end'),
-      position: destination.points.last,
+    final endMarkerIda = Marker(
+        markerId: const MarkerId('end-ida'),
+        position: destination.puntosIda.last,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen));
+
+    final startMarkerVuelta = Marker(
+      markerId: const MarkerId('start-vuelta'),
+      position: destination.puntosVuelta.first,
     );
+    final endMarkerVuelta = Marker(
+        markerId: const MarkerId('end-vuelta'),
+        position: destination.puntosVuelta.last,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen));
+
     final currentPolylines = Map<String, Polyline>.from(state.polylines);
     final currentMarkers = Map<String, Marker>.from(state.markers);
-    currentMarkers['start'] = startMarker;
-    currentMarkers['end'] = endMarker;
+    currentMarkers['start-ida'] = startMarkerIda;
+    currentMarkers['end-ida'] = endMarkerIda;
+    currentMarkers['start-vuelta'] = startMarkerVuelta;
+    currentMarkers['end-vuelta'] = endMarkerVuelta;
 
-    currentPolylines['route'] = myRoute;
+    currentPolylines['route-ida'] = miRutaIda;
+    currentPolylines['route-vuelta'] = miRutaVuelta;
     add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
   }
 

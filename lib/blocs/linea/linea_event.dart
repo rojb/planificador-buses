@@ -27,3 +27,8 @@ class OnSearchLineEvent extends LineaEvent {
 class OnShowingLineInformationEvent extends LineaEvent {}
 
 class OnHidingLineInformationEvent extends LineaEvent {}
+
+class OnAddingRouteEvent extends LineaEvent {
+  final DatosRecorridoActual datosRecorridoActual;
+  const OnAddingRouteEvent(this.datosRecorridoActual);
+}

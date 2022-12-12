@@ -1,22 +1,37 @@
 class Linea {
-  final String lineaID;
   final String nombre;
-  final String? imagen;
+  final String cod;
+  final String? direccion;
+  final String? telefono;
+  final String? email;
+  final String? foto;
+  final String? descripcion;
 
-  const Linea({required this.lineaID, required this.nombre, this.imagen});
+  const Linea(
+      {required this.nombre,
+      required this.cod,
+      this.direccion,
+      this.telefono,
+      this.email,
+      this.foto,
+      this.descripcion});
 
   Map<String, dynamic> toMap() {
     return {
-      'lineaID': lineaID,
+      'cod': cod,
       'nombre': nombre,
-      'imagen': imagen,
+      'direccion': direccion,
+      'telefono': telefono,
+      'email': email,
+      'foto': foto,
+      'descripcion': descripcion
     };
   }
 
   // Implement toString to make it easier to see information about
-  // each dog when using the print statement.
+  // each property when using the print statement.
   @override
   String toString() {
-    return 'Linea{lineaID: $lineaID, nombre: $nombre, imagen: $imagen}';
+    return 'Linea{cod: $cod, nombre: $nombre,  direccion: $direccion, telefono: $telefono, email: $email, foto: $foto, descripcion: $descripcion}';
   }
 }

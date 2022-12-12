@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:planificador_buses/blocs/blocs.dart';
 
 import '../models/models.dart';
-import 'dart:math';
 
 class SearchLineDelegate extends SearchDelegate {
   var col = 300;
@@ -90,14 +89,20 @@ class SearchLineDelegate extends SearchDelegate {
               const Padding(
                   padding: EdgeInsets.only(right: 5),
                   child: Icon(Icons.bus_alert_sharp)),
-              SizedBox(width: 120, child: Text(_lineasFiltradas[index].nombre)),
+              SizedBox(
+                  width: 120,
+                  child: Text(
+                    _lineasFiltradas[index].nombre,
+                    style: const TextStyle(color: Colors.white),
+                  )),
               const SizedBox(
                 width: 25,
               ),
               Image.network(
-                "http://res.cloudinary.com/drxr7czpf/image/upload/v1630622084/p4342jsygtdplzgtkbbd.jpg",
-                width: 200,
+                _lineasFiltradas[index].foto!,
+                width: 150,
                 height: 120,
+                fit: BoxFit.contain,
                 alignment: Alignment.topRight,
               ),
             ],

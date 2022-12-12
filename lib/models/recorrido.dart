@@ -1,33 +1,48 @@
-import 'package:planificador_buses/models/parada.dart';
+import 'package:planificador_buses/models/models.dart';
 
 class Recorrido {
-  final String lineaID;
-  final int orden;
-  final Parada paradaIni;
-  final Parada paradaSig;
+  final int recorridoID;
+  final String lineaCod;
+  final String tipo;
+  final double? tiempo;
   final double? distancia;
+  final int? velocidad;
+  final String? colorLinea;
+  final double? grosor;
+  final String? descripcion;
+  final List<RecorridoParada> puntos;
 
   const Recorrido(
-      {required this.lineaID,
-      required this.orden,
-      required this.paradaIni,
-      required this.paradaSig,
-      this.distancia});
+      {required this.recorridoID,
+      required this.lineaCod,
+      required this.tipo,
+      this.tiempo,
+      this.distancia,
+      this.velocidad,
+      this.colorLinea,
+      this.grosor,
+      this.descripcion,
+      required this.puntos});
 
   Map<String, dynamic> toMap() {
     return {
-      'lineaID': lineaID,
-      'orden': orden,
-      'paradaIni': paradaIni,
-      'paradaSig': paradaSig,
+      'recorridoID': recorridoID,
+      'lineaCod': lineaCod,
+      'tipo': tipo,
+      'tiempo': tiempo,
       'distancia': distancia,
+      'velocidad': velocidad,
+      'colorLinea': colorLinea,
+      'grosor': grosor,
+      'descripcion': descripcion,
+      'puntos': puntos
     };
   }
 
   // Implement toString to make it easier to see information about
-  // each dog when using the print statement.
+  // each property when using the print statement.
   @override
   String toString() {
-    return 'Recorrido{lineaID: $lineaID, orden: $orden, paradaIni: ${paradaIni.toString()}, paradaSig: ${paradaSig.toString()}, distancia: $distancia}';
+    return 'Recorrido{recorridoID: $recorridoID,  lineaCod: $lineaCod, tipo: $tipo, tiempo: $tiempo, distancia: $distancia, velocidad: $velocidad, colorLinea: $colorLinea, grosor: $grosor, descripcion: $descripcion';
   }
 }
