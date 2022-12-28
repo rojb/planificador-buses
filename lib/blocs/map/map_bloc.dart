@@ -5,7 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:planificador_buses/blocs/blocs.dart';
 import 'package:planificador_buses/models/models.dart';
-
+import 'package:planificador_buses/models/polyline_result.dart';
+import 'package:planificador_buses/utils/constants.dart' as constants;
 part 'map_event.dart';
 part 'map_state.dart';
 
@@ -33,7 +34,6 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) {
     _mapController = event.controller;
-/*     _mapController!.setMapStyle(jsonEncode(gtaTheme)); */
     emit(state.copyWith(isMapInitialize: true));
   }
 
@@ -49,52 +49,66 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     moveCamera(locationBloc.state.lastKnowLocation!);
   }
 
-  Future drawRoutePolyline(LineaRecorrido destination) async {
-    final miRutaIda = Polyline(
-      polylineId: const PolylineId('route-ida'),
-      color: Colors.red,
-      width: 5,
-      points: destination.puntosIda,
-      startCap: Cap.roundCap,
-      endCap: Cap.roundCap,
-    );
-    final miRutaVuelta = Polyline(
-      polylineId: const PolylineId('route-vuelta'),
-      color: const Color.fromARGB(255, 31, 112, 35),
-      width: 5,
-      points: destination.puntosVuelta,
+  PolylineResult drawPolyline(String id, List<LatLng> puntos, Color color) {
+    final Map<String, Polyline> currentPolylines = {};
+    final Map<String, Marker> currentMarkers = {};
+    final miRuta = Polyline(
+      polylineId: PolylineId('route-$id'),
+      color: color,
+      width: 3,
+      points: puntos,
       startCap: Cap.roundCap,
       endCap: Cap.roundCap,
     );
 
-    final startMarkerIda = Marker(
-      markerId: const MarkerId('start-ida'),
-      position: destination.puntosIda.first,
+    final startMarker = Marker(
+      markerId: MarkerId('start-$id'),
+      position: puntos.first,
     );
-    final endMarkerIda = Marker(
-        markerId: const MarkerId('end-ida'),
-        position: destination.puntosIda.last,
+    final endMarker = Marker(
+        markerId: MarkerId('end-$id'),
+        position: puntos.last,
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen));
 
-    final startMarkerVuelta = Marker(
-      markerId: const MarkerId('start-vuelta'),
-      position: destination.puntosVuelta.first,
-    );
-    final endMarkerVuelta = Marker(
-        markerId: const MarkerId('end-vuelta'),
-        position: destination.puntosVuelta.last,
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen));
+    currentMarkers['start-$id'] = startMarker;
+    currentMarkers['end-$id'] = endMarker;
+    currentPolylines['route-$id'] = miRuta;
 
-    final currentPolylines = Map<String, Polyline>.from(state.polylines);
-    final currentMarkers = Map<String, Marker>.from(state.markers);
-    currentMarkers['start-ida'] = startMarkerIda;
-    currentMarkers['end-ida'] = endMarkerIda;
-    currentMarkers['start-vuelta'] = startMarkerVuelta;
-    currentMarkers['end-vuelta'] = endMarkerVuelta;
+    return PolylineResult(
+        currentMarkers: currentMarkers, currentPolylines: currentPolylines);
+  }
 
-    currentPolylines['route-ida'] = miRutaIda;
-    currentPolylines['route-vuelta'] = miRutaVuelta;
-    add(OnDisplayPolylinesEvent(currentPolylines, currentMarkers));
+  void drawRoutePolyline(LineaRecorrido destination) {
+    PolylineResult result;
+    if (destination.tipoRecorridoSeleccionado == constants.TIPO_RECORRIDO) {}
+
+    switch (destination.tipoRecorridoSeleccionado) {
+      case constants.TIPO_IDA:
+        result =
+            drawPolyline(constants.TIPO_IDA, destination.puntosIda, Colors.red);
+        add(OnDisplayPolylinesEvent(
+            result.currentPolylines, result.currentMarkers));
+        break;
+      case constants.TIPO_VUELTA:
+        result = drawPolyline(
+            constants.TIPO_VUELTA, destination.puntosVuelta, Colors.green);
+        add(OnDisplayPolylinesEvent(
+            result.currentPolylines, result.currentMarkers));
+
+        break;
+
+      default:
+        final ida =
+            drawPolyline(constants.TIPO_IDA, destination.puntosIda, Colors.red);
+        final vuelta = drawPolyline(
+            constants.TIPO_VUELTA, destination.puntosVuelta, Colors.green);
+        final newPolylines = {
+          ...ida.currentPolylines,
+          ...vuelta.currentPolylines
+        };
+        final newMarkers = {...ida.currentMarkers, ...vuelta.currentMarkers};
+        add(OnDisplayPolylinesEvent(newPolylines, newMarkers));
+    }
   }
 
   void startFollowingUser() {

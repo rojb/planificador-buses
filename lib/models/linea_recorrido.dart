@@ -5,10 +5,12 @@ class LineaRecorrido {
   final List<LatLng> puntosVuelta;
   final double duration;
   final double distance;
+  final String tipoRecorridoSeleccionado;
 
   LineaRecorrido(
       {required this.puntosIda,
       required this.puntosVuelta,
       required this.duration,
-      required this.distance});
+      required this.distance,
+      required this.tipoRecorridoSeleccionado});
 }

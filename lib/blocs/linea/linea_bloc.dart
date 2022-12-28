@@ -35,7 +35,7 @@ class LineaBloc extends Bloc<LineaEvent, LineaState> {
     add(OnLineaInitializedEvent(lineas));
   }
 
-  Future<LineaRecorrido> getRecorrido(Linea linea) async {
+  Future<LineaRecorrido> getRecorrido(Linea linea, String tipoRecorrido) async {
     final recorrido = await _db.route(linea.cod);
 
     final puntosIda = recorrido[0].puntos.map((e) {
@@ -44,8 +44,7 @@ class LineaBloc extends Bloc<LineaEvent, LineaState> {
     final puntosVuelta = recorrido[1].puntos.map((e) {
       return e.paradaIni.coordenadas;
     }).toList();
-    /*   final points = recorrido.map((e) => e.paradaIni.coordenadas).toList();
-    */
+
     final datos = DatosRecorridoActual(
         distanciaIda: recorrido[0].distancia!,
         distanciaVuelta: recorrido[1].distancia!,
@@ -63,6 +62,7 @@ class LineaBloc extends Bloc<LineaEvent, LineaState> {
         puntosIda: puntosIda,
         puntosVuelta: puntosVuelta,
         duration: 0.0,
-        distance: 0.0);
+        distance: 0.0,
+        tipoRecorridoSeleccionado: tipoRecorrido);
   }
 }

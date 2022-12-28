@@ -1,9 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:planificador_buses/blocs/blocs.dart';
-
+import 'package:planificador_buses/widgets/widgets.dart';
+import 'package:planificador_buses/utils/constants.dart' as constants;
 import '../models/models.dart';
 
 class SearchLineDelegate extends SearchDelegate {
@@ -40,7 +43,7 @@ class SearchLineDelegate extends SearchDelegate {
           return ListTile(
             onTap: () async {
               final linea = _lineasFiltradas[index];
-              final result = await lineaBloc.getRecorrido(linea);
+              final result = await lineaBloc.getRecorrido(linea, 'ida');
 
               close(context, result);
             },
@@ -80,9 +83,67 @@ class SearchLineDelegate extends SearchDelegate {
           tileColor: Colors.green[col],
           onTap: () async {
             final linea = _lineasFiltradas[index];
-            final result = await lineaBloc.getRecorrido(linea);
+            String tipo = '';
+            await showModalBottomSheet(
+                backgroundColor: Colors.green,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30))),
+                context: context,
+                builder: (context) {
+                  void setTipo(String tipoRecorrido) {
+                    tipo = tipoRecorrido;
+                  }
 
-            close(context, result);
+                  return Container(
+                    padding: const EdgeInsets.only(top: 15, bottom: 30),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Elige el tipo de recorrido que deseas visualizar',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(235, 255, 255, 255),
+                              fontSize: 16),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            BtnTipoRecorrido(
+                              tipo: constants.TIPO_IDA,
+                              setTipo: setTipo,
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            BtnTipoRecorrido(
+                              tipo: constants.TIPO_VUELTA,
+                              setTipo: setTipo,
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            BtnTipoRecorrido(
+                              tipo: constants.TIPO_AMBOS,
+                              setTipo: setTipo,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                });
+
+            if (tipo != '') {
+              final result = await lineaBloc.getRecorrido(linea, tipo);
+              close(context, result);
+            }
           },
           title: Row(
             children: [
