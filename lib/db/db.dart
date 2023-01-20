@@ -199,4 +199,35 @@ class DB {
 
     return al;
   }
+
+  Future<Parada> getDistancia(double lat, double long) async {
+    final db = await _openDatabase();
+
+    final List<Map<String, dynamic>> maps = await db.rawQuery("""  
+          SELECT * FROM (
+                    SELECT *, 
+                        (
+                            (
+                                (
+                                    acos(
+                                        sin(( $lat * pi() / 180))
+                                        *
+                                        sin(( parada.latitud * pi() / 180)) + cos(( $lat * pi() /180 ))
+                                        *
+                                        cos(( parada.latitud * pi() / 180)) * cos((( $long - parada.longitud) * pi()/180)))
+                                ) * 180/pi()
+                            ) * 60 * 1.1515 * 1.609344
+                        )
+                    as distance FROM parada
+                ) parada
+                ORDER by distance
+                LIMIT 1;
+    """);
+
+    return Parada(
+        id: maps[0]['id'],
+        paradaID: maps[0]['paradaID'],
+        coordenadas: LatLng(maps[0]['latitud'], maps[0]['longitud']),
+        distancia: maps[0]['distance']);
+  }
 }

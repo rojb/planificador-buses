@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:planificador_buses/blocs/blocs.dart';
+import 'package:planificador_buses/utils/constants.dart';
+import 'package:planificador_buses/widgets/btn_generar_recorrido.dart';
 import 'package:planificador_buses/widgets/line_appbar.dart';
+import 'package:planificador_buses/widgets/marcador_manual.dart';
+import 'package:planificador_buses/widgets/planificador.dart';
 
 import '../views/views.dart';
 import '../widgets/widgets.dart';
@@ -51,7 +55,9 @@ class _MapScreenState extends State<MapScreen> {
                     polylines: polylines.values.toSet(),
                     markers: mapState.markers.values.toSet(),
                   ),
-                  const LineAppBar()
+                  const LineAppBar(),
+                  const Planificador(),
+                  const ManualMarker()
                 ],
               ),
             );
@@ -64,6 +70,10 @@ class _MapScreenState extends State<MapScreen> {
         children: const [
           BtnCurrentUserLocation(),
           BtnSearchLine(),
+          SizedBox(
+            height: 8,
+          ),
+          BtnGenerarRecorrido(),
         ],
       ),
     );

@@ -32,3 +32,13 @@ class OnAddingRouteEvent extends LineaEvent {
   final DatosRecorridoActual datosRecorridoActual;
   const OnAddingRouteEvent(this.datosRecorridoActual);
 }
+
+class OnCalculateRouteEvent extends LineaEvent {
+  final List<LatLng> recorridoActual;
+
+  const OnCalculateRouteEvent(this.recorridoActual);
+}
+
+class OnDisplayLineEvent extends LineaEvent {}
+
+class OnHidingLineEvent extends LineaEvent {}

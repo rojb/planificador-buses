@@ -37,6 +37,7 @@ class LineAppBar extends StatelessWidget {
             ),
           );
         }
+
         return const SizedBox();
       },
     );

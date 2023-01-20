@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:planificador_buses/db/db.dart';
+import 'package:planificador_buses/models/ksp_response.dart';
 import 'package:planificador_buses/models/models.dart';
+import 'package:planificador_buses/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:http/http.dart' as http;
 part 'linea_event.dart';
 part 'linea_state.dart';
 
@@ -24,6 +28,12 @@ class LineaBloc extends Bloc<LineaEvent, LineaState> {
         (event, emit) => emit(state.copyWith(mostrandoLinea: false)));
     on<OnAddingRouteEvent>((event, emit) =>
         emit(state.copyWith(datosRecorridoActual: event.datosRecorridoActual)));
+    on<OnCalculateRouteEvent>((event, emit) =>
+        emit(state.copyWith(recorridoActual: event.recorridoActual)));
+    on<OnDisplayLineEvent>(
+        (event, emit) => emit(state.copyWith(displayLine: true)));
+    on<OnHidingLineEvent>(
+        (event, emit) => emit(state.copyWith(displayLine: false)));
   }
   Future<void> initApp() async {
     final preferences = await SharedPreferences.getInstance();

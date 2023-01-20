@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart';
 import 'package:planificador_buses/blocs/blocs.dart';
 import 'package:planificador_buses/screens/loading_screen.dart';
 import 'package:planificador_buses/screens/testDB.dart';
@@ -12,7 +13,8 @@ void main() => runApp(MultiBlocProvider(providers: [
       BlocProvider(
           create: (context) =>
               MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context))),
-      BlocProvider(create: (context) => LineaBloc())
+      BlocProvider(create: (context) => LineaBloc()),
+      BlocProvider(create: (context) => PlanificadorBloc())
     ], child: const MyApp()));
 
 class MyApp extends StatelessWidget {

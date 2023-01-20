@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:planificador_buses/blocs/blocs.dart';
 import 'package:planificador_buses/delegates/search_line_delegate.dart';
-import 'package:planificador_buses/models/dijkstra.dart';
-import 'package:planificador_buses/models/graph.dart';
-import 'package:planificador_buses/utils/graph.dart';
 
 import '../models/models.dart';
 
 class BtnSearchLine extends StatelessWidget {
   const BtnSearchLine({super.key});
+
   void onSearchResults(BuildContext context, var result) async {
     final mapBloc = BlocProvider.of<MapBloc>(context);
 
@@ -29,9 +27,8 @@ class BtnSearchLine extends StatelessWidget {
       backgroundColor: Colors.green[600],
       heroTag: "btnSearchLine",
       onPressed: () async {
-        /*   GraphI().generarM(); */
-        /*  Dijkstra().maini(); */
-        /*   GraphI().shortestPathDijkstra(0, 1795); */
+        final planificadorBloc = BlocProvider.of<PlanificadorBloc>(context);
+        planificadorBloc.add(OnCancelPlanificadorEvent());
         final result =
             await showSearch(context: context, delegate: SearchLineDelegate());
         onSearchResults(context, result);

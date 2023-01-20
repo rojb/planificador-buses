@@ -49,6 +49,47 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     moveCamera(locationBloc.state.lastKnowLocation!);
   }
 
+  PolylineResult drawPolylineRoute(String id, List<LatLng> puntos, Color color,
+      List<LatLng> transbordos, List<String> lineas) {
+    final Map<String, Polyline> currentPolylines = {};
+    final Map<String, Marker> currentMarkers = {};
+    final miRuta = Polyline(
+      polylineId: PolylineId('route-$id'),
+      color: color,
+      width: 3,
+      points: puntos,
+      startCap: Cap.roundCap,
+      endCap: Cap.roundCap,
+    );
+
+    final startMarker = Marker(
+        markerId: MarkerId('start-$id'),
+        position: puntos.first,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+        infoWindow: InfoWindow(title: 'Inicio ${lineas.first}', onTap: () {}));
+    final endMarker = Marker(
+      markerId: MarkerId('end-$id'),
+      infoWindow: InfoWindow(title: 'Fin ${lineas.last}', onTap: () {}),
+      position: puntos.last,
+    );
+    currentMarkers['start-$id'] = startMarker;
+    for (int i = 1; i < transbordos.length - 1; i++) {
+      final myMarker = Marker(
+          markerId: MarkerId('marker-$i'),
+          infoWindow: InfoWindow(
+              title: 'Transbordo a línea ${lineas[i]}', onTap: () {}),
+          position: transbordos[i],
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueOrange));
+      currentMarkers['marker-$i'] = myMarker;
+    }
+    currentMarkers['end-$id'] = endMarker;
+    currentPolylines['route-$id'] = miRuta;
+
+    return PolylineResult(
+        currentMarkers: currentMarkers, currentPolylines: currentPolylines);
+  }
+
   PolylineResult drawPolyline(String id, List<LatLng> puntos, Color color) {
     final Map<String, Polyline> currentPolylines = {};
     final Map<String, Marker> currentMarkers = {};
@@ -62,13 +103,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     );
 
     final startMarker = Marker(
-      markerId: MarkerId('start-$id'),
-      position: puntos.first,
-    );
-    final endMarker = Marker(
-        markerId: MarkerId('end-$id'),
-        position: puntos.last,
+        markerId: MarkerId('start-$id'),
+        position: puntos.first,
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen));
+    final endMarker = Marker(
+      markerId: MarkerId('end-$id'),
+      position: puntos.last,
+    );
 
     currentMarkers['start-$id'] = startMarker;
     currentMarkers['end-$id'] = endMarker;
@@ -96,7 +137,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
             result.currentPolylines, result.currentMarkers));
 
         break;
-
+      case constants.TIPO_RECORRIDO:
+        result = drawPolylineRoute(
+            constants.TIPO_RECORRIDO,
+            destination.puntosIda,
+            Colors.green,
+            destination.transbordo!,
+            destination.listaLineas!);
+        add(OnDisplayPolylinesEvent(
+            result.currentPolylines, result.currentMarkers));
+        break;
       default:
         final ida =
             drawPolyline(constants.TIPO_IDA, destination.puntosIda, Colors.red);
